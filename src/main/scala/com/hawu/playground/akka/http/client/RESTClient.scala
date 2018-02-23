@@ -1,7 +1,7 @@
 package com.hawu.playground.akka.http.client
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
+import akka.http.scaladsl.{Http, HttpsConnectionContext}
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.model.HttpMethods._
@@ -31,6 +31,12 @@ class RESTClient(actorSystem: ActorSystem, prefix: String, host: String, port: I
   implicit val system = actorSystem
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
+
+  def getAllMessagesUsingHTTPS(context: HttpsConnectionContext) = {
+      Http().setDefaultClientHttpsContext(context)
+      Http()
+        .singleRequest(HttpRequest(GET, uri = RESTClientURLBuilder(prefix, host, port)))
+  }
 
   def getAllMessages = Http()
     .singleRequest(HttpRequest(GET, uri = RESTClientURLBuilder(prefix, host, port)))

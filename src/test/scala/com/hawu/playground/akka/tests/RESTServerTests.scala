@@ -1,6 +1,7 @@
 package com.hawu.playground.akka.tests
 
 import akka.actor.{ActorSystem, Props}
+import akka.http.scaladsl.ConnectionContext
 import akka.http.scaladsl.Http.ServerBinding
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.unmarshalling.Unmarshal
@@ -10,6 +11,7 @@ import com.hawu.playground.akka.http.server.RESTServer
 import com.hawu.playground.akka.tests.dummy.{FailureCommandController, SuccessCommandController}
 import org.scalatest.{AsyncFlatSpec, FlatSpec}
 import akka.stream.ActorMaterializer
+import com.hawu.playground.akka.utils.HttpsConnectionFromKeystore
 
 import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success}
@@ -226,7 +228,7 @@ class RESTServerTests extends AsyncFlatSpec  {
 
       val client = new RESTClient(system, "http", "localhost", 8083)
       import scala.concurrent.ExecutionContext.Implicits.global
-      val future: Future[HttpResponse] = client.createGroup("aa")
+      val future: Future  [HttpResponse] = client.createGroup("aa")
       future map {
         req => {
           actorSystem.map(as => {
@@ -313,5 +315,45 @@ class RESTServerTests extends AsyncFlatSpec  {
         ActorSystemTerminator(actorSystem,restServerBinding)
         Future {fail}
     }
+  }
+
+  "RESTClient" should "make secure connection on 443 port" in {
+
+    var actorSystem: Option[ActorSystem] = None
+    var restServerBinding: Option[Future[ServerBinding]] = None
+
+    try {
+      val system = ActorSystem("Hawus_space_test")
+      actorSystem = Some(system)
+
+      val commanController = system.actorOf(Props(classOf[SuccessCommandController], List("aa", "bb")))
+
+      val certPass = system.settings.config.getString("playground.cert.pass")
+      restServerBinding = Some(RESTServer(443, "localhost", commanController, system, certPass, true))
+
+      val client = new RESTClient(system, "https", "localhost", 443)
+      import scala.concurrent.ExecutionContext.Implicits.global
+      val future: Future[HttpResponse] = client.getAllMessagesUsingHTTPS(ConnectionContext.https(HttpsConnectionFromKeystore(certPass, system)))
+      future map {
+        req => {
+
+          actorSystem.map(as => {
+            implicit val actorSystem = as
+            implicit val materializer = ActorMaterializer()
+            val responseAsString: Future[String] = Unmarshal(req.entity).to[String]
+            responseAsString.map(body => assert(body == "aa\nbb\n"))
+          })
+
+          ActorSystemTerminator(actorSystem,restServerBinding)
+          assert(req.status.intValue == 201)
+        }
+      }
+    } catch {
+      case t: Throwable =>
+        ActorSystemTerminator(actorSystem,restServerBinding)
+        Future {fail}
+    }
+
+
   }
 }

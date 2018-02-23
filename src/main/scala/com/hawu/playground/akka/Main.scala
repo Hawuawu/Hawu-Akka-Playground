@@ -14,11 +14,16 @@ object Main extends App {
 
   try {
     val system = ActorSystem("Hawus_space")
+
+    val host = system.settings.config.getString("playground.rest.server.host")
+    val port = system.settings.config.getInt(   "playground.rest.server.port")
+    val certPass = system.settings.config.getString("playground.cert.pass")
+
     actorSystem = Some(system)
 
     val commanController = system.actorOf(Props(classOf[CommandController]))
 
-    restServerBinding = Some(RESTServer(8080, "localhost", commanController, system))
+    restServerBinding = Some(RESTServer(port, host, commanController, system, certPass, true))
   } catch {
     case t: Throwable =>
       actorSystem.map(as => as.log.error("Exception while starting entrypoint {}", t))
