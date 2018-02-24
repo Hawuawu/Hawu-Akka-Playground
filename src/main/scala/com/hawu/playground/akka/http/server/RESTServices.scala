@@ -26,6 +26,9 @@ class RESTServices(commandController: ActorRef) extends FutureDirectives with Di
           case msg: GotMessages =>
             complete(HttpResponse(201, entity = msg.messages.foldLeft("")(_ + " " + _ + "\n")))
 
+          case CommandTimeouted =>
+            complete(HttpResponse(408))
+
           case anyOther =>
             complete(HttpResponse(500, entity = "Got bad response!" + anyOther))
         }
@@ -35,9 +38,12 @@ class RESTServices(commandController: ActorRef) extends FutureDirectives with Di
 
   val getAllMessagesReq = path("") {
     get {
-        onSuccess(commandController ? GetAllMessages) {
+        onSuccess(commandController ? GetAllMessages()) {
           case msg: GotMessages =>
             complete(HttpResponse(201, entity = msg.messages.foldLeft("")(_ + " " + _ + "\n")))
+
+          case CommandTimeouted =>
+            complete(HttpResponse(408))
 
           case anyOther =>
             complete(HttpResponse(500, entity = "Got bad response!" + anyOther))
@@ -45,13 +51,15 @@ class RESTServices(commandController: ActorRef) extends FutureDirectives with Di
     }
   }
 
-
   val deleteGroupReq = path("") {
     delete {
       parameter('groupId) { groupId =>
         onSuccess(commandController ? DeleteGroupById(groupId)) {
           case msg: GroupByIdDeleted =>
             complete(HttpResponse(201))
+
+          case CommandTimeouted =>
+            complete(HttpResponse(408))
 
           case msg: CannotDeleteGroupById =>
             complete(HttpResponse(500, entity = msg.reason))
@@ -70,6 +78,9 @@ class RESTServices(commandController: ActorRef) extends FutureDirectives with Di
           case msg: GroupCreated =>
             complete(HttpResponse(201))
 
+          case CommandTimeouted =>
+            complete(HttpResponse(408))
+
           case msg: CannotCreateGroup =>
             complete(HttpResponse(500, entity = msg.reason))
 
@@ -86,6 +97,9 @@ class RESTServices(commandController: ActorRef) extends FutureDirectives with Di
         onSuccess(commandController ? AssignMessageToGroup(groupId, message)) {
           case msg: AssignMessageToGroupCompleted =>
             complete(HttpResponse(201))
+
+          case CommandTimeouted =>
+            complete(HttpResponse(408))
 
           case msg: AssignMessageToGroupFailed =>
             complete(HttpResponse(500, entity = msg.reason))

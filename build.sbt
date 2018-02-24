@@ -4,6 +4,8 @@ version := "1.0"
 
 scalaVersion := "2.11.11"
 
+libraryDependencies += "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0"
+
 libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.9"
 
 libraryDependencies +=  "com.typesafe.akka" %% "akka-persistence" % "2.5.9"
@@ -21,3 +23,5 @@ libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.9"
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.4"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+
+
