@@ -53,6 +53,8 @@ class RESTServerTests extends AsyncFlatSpec  {
 
       val client = new RESTClient(system, "http", "localhost", 8080)
       import scala.concurrent.ExecutionContext.Implicits.global
+
+      implicit val timeout = Timeout(5 seconds)
       val future: Future[HttpResponse] = client.getAllMessagesForGroupId("aa")
       future map {
          req => {

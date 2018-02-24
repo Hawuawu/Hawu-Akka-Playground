@@ -26,12 +26,17 @@ Apache kafka consists of 4 parts:
 - Message queue **Producer** which is encapsulated by actor [here](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/scala/com/hawu/playground/akka/producer/CommandKafkaProducer.scala)
 - Message queue **Consumer** which is created is encapsulated by actor [here](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/scala/com/hawu/playground/akka/consumer/CommandKafkaConsumer.scala)
 
--Installed local VM - Virtual Box, where I'm running kafka server and zookeper.
--Installed CentOS 7, Zookeeper, Apache Kafka and tested
-- [Kavka server](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_server.png)
+- Installed local VM - Virtual Box, where I'm running kafka server and zookeper.
+
+Installed CentOS 7, Zookeeper, Apache Kafka and tested
+- For development purpose i disabled firewall.
+
+[Kavka server](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_server.png)
 - [Kafka producer](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_test_producer.png)
 - [Kafka consumer](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_test_consumer.png)
 - Followed article with installation of [kafka server](https://www.vultr.com/docs/how-to-install-apache-kafka-on-centos-7)
+- Changed proper ipaddresses to current host
+- [Unit tests](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/KafkaServerTests.scala) for Kafka server **needs to have broker and server running!**
 
 [Diagram for kafka communication](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/Kafka_layer.png)
 
@@ -39,6 +44,7 @@ Apache kafka consists of 4 parts:
 
 Is located [here](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/resources/application.conf)
 
+_ Improved scala tests for using async flat spec , no more awai synchronization _
 
 
 

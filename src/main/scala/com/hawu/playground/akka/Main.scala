@@ -41,11 +41,7 @@ object Main extends App {
     val repliesReceiver = system.actorOf(Props(classOf[RepliesReceiver], commandReplyProxy))
     system.actorOf(Props(classOf[CommandKafkaConsumer], repliesReceiver, commandsReceiver))
 
-
-
-
-
-   // Some(RESTServer(port, host, commandsController, system, certPass, true))
+    Some(RESTServer(port, host, commandsController, system, certPass, true))
 
 
 

@@ -28,7 +28,7 @@ class CommandKafkaConsumer(commandReceiver: ActorRef, replyReceiver: ActorRef) e
   def receive = {
     case ListenForNewMessage =>
       try {
-        val messages = consumer.poll(pollTime.getOrElse(10000)) //I hate this, but its blocking operation (polling system for kafka)
+        val messages = consumer.poll(pollTime.getOrElse(1000)) //I hate this, but its blocking operation (polling system for kafka)
         messages.iterator.asScala.foreach(item => {
           item.topic match {
             case `commandReplyTopic` => replyReceiver ! KafkaSerializedMessage(item.value())
