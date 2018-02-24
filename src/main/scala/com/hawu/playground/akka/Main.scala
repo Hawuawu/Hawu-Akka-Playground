@@ -43,8 +43,6 @@ object Main extends App {
 
     Some(RESTServer(port, host, commandsController, system, certPass, true))
 
-
-
     system.log.debug("Press enter to quit!")
     scala.io.StdIn.readLine
   } catch {

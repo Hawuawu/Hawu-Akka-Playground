@@ -19,6 +19,7 @@ You can find RESTServer services definition at following url's:
 \]
 
 **Self-signed certificate**
+
 REST service are secured by self-signed certificate which I had to generate and put into keystore.
 
 **Apache Kafka**
@@ -42,6 +43,27 @@ Installed CentOS 7, Zookeeper, Apache Kafka and tested
 - [Unit tests](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/KafkaServerTests.scala) for Kafka server **needs to have broker and server running!**
 
 [Diagram for kafka communication](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/Kafka_layer.png)
+
+**Custom string serializer and deserializer**
+
+Created serializer supporting java and scala primitive formats using new reflection API, native scala xml and case classes. Supports case serialization and sererialization with attributes with primitive type/
+- java.lang.Byte
+- java.lang.Short
+- java.lang.Character
+- java.lang.Int
+- java.lang.Float
+- java.lang.Double
+- java.lang.Long
+- java.lang.String
+- java.lang.Boolean
+
+- scala.Byte
+- scala.Char
+- scala.Int
+- scala.Float
+- scala.Double
+- scala.Long
+- scala.Boolean
 
 **Config File**
 
