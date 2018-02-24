@@ -10,7 +10,7 @@ class CommandKafkaProducer extends Actor with ActorLogging {
 
   def receive = {
     case msg: SendKafkaMessageToTopic =>
-      producer.send(new ProducerRecord[String, String](msg.topic, msg.message.serializedMessage))
+      producer.send(new ProducerRecord[String, String](msg.topic, msg.message.toString))
   }
 
   override def postStop(): Unit = {

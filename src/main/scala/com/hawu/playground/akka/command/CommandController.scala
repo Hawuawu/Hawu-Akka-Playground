@@ -22,13 +22,13 @@ class CommandController(kafkaProducer: ActorRef, replyProxy: ActorRef) extends A
               .digest(f"$command-$timestamp-$uuid".getBytes("UTF-8")))
           )
 
-          val serializedCommand = Serialization(command)
-
-          replyProxy.tell(KafkaMessage(timestamp, hash, serializedCommand), sender)
-          kafkaProducer ! SendKafkaMessageToTopic(commandTopic, KafkaMessage(timestamp, hash, serializedCommand))
+          Serialization(command).map(serializedCommand => {
+            replyProxy.tell(KafkaMessage(timestamp, hash, serializedCommand, command.getClass.getTypeName), sender)
+            kafkaProducer ! SendKafkaMessageToTopic(commandTopic, KafkaMessage(timestamp, hash, serializedCommand, command.getClass.getTypeName))
+          })
 
         case other =>
-          kafkaProducer ! SendKafkaMessageToTopic(commandTopic, KafkaMessage(timestamp, "", Serialization(command)))
+          kafkaProducer ! SendKafkaMessageToTopic(commandTopic, KafkaMessage(timestamp, "", Serialization(command).getOrElse(""), command.getClass.getTypeName))
       }
   }
 }

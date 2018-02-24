@@ -2,7 +2,7 @@ package com.hawu.playground.akka
 
 import akka.actor.{ActorSystem, Props}
 import akka.http.scaladsl.Http.ServerBinding
-import com.hawu.playground.akka.command.{CommandConsumerSideReceiver, CommandController, CommandReplyProxy, RepliesReceiver}
+import com.hawu.playground.akka.command._
 import com.hawu.playground.akka.consumer.{CommandKafkaConsumer, ConsumerFactory}
 import com.hawu.playground.akka.event.PlaygroundPersistentState
 import com.hawu.playground.akka.http.server.RESTServer
@@ -17,6 +17,23 @@ object Main extends App {
   var restServerBinding: Option[Future[ServerBinding]] = None
 
   try {
+    CommandsRegisty (
+      Seq(
+        GetAllMessages(),
+        GetMessagesForGroup(),
+        DeleteGroupById(),
+        GotMessages(),
+        AssignMessageToGroup(),
+        AssignMessageToGroupCompleted(),
+        AssignMessageToGroupFailed(),
+        GroupByIdDeleted(),
+        CannotDeleteGroupById(),
+        CreateGroup(),
+        GroupCreated(),
+        CannotCreateGroup()
+      )
+    )
+
     val system = ActorSystem("Hawus_space")
     import scala.concurrent.ExecutionContext.Implicits.global
     system.whenTerminated.onComplete {

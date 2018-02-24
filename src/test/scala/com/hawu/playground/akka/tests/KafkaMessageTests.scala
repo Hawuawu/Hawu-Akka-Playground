@@ -6,7 +6,7 @@ import org.scalatest.FlatSpec
 class KafkaMessageTests extends FlatSpec {
  it should  "serialize and deserialize KafkaMessage " in {
    val message1 = KafkaMessage()
-   val message2 = KafkaMessage(1000L, "aaaa", "bbbb")
+   val message2 = KafkaMessage(1000L, "aaaa", "bbbb", "dddd")
 
    val serialized = message1.toString
    val deserialized = KafkaMessageBuilder(serialized)

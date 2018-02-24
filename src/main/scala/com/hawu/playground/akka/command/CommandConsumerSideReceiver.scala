@@ -29,17 +29,30 @@ class CommandConsumerWorker(persistenceActor: ActorRef, replyProducer: ActorRef)
     case message: KafkaMessage =>
       originalMessage = Some(message)
 
-      val deserialized = Serialization(message.serializedMessage)
-      if(deserialized.isDefined) {
-        persistenceActor.tell(deserialized, replyProducer)
+      val deregistred = CommandsRegisty(message.objectName)
+      val deserialized = deregistred.map(found => {
+        found match {
+          case json: KafkaJSONDeserializable =>
+            Some(json.fromJson(message.serializedMessage))
+          case t =>
+            None
+        }
+      })
+
+     if(deserialized.isDefined) {
+        persistenceActor ! deserialized.get
       } else {
         log.error("Cannot deserialize message {}", message.serializedMessage)
       }
-      context.stop(self)
+
+      if(message.replyToken == "")
+      {
+         context.stop(self)
+      }
 
     case messge: HttpCommandResponse =>
       originalMessage.map(om => {
-        replyProducer ! SendKafkaMessageToTopic(commandReplyTopic, KafkaMessage(System.currentTimeMillis(), om.replyToken, Serialization(messge)))
+        replyProducer ! SendKafkaMessageToTopic(commandReplyTopic, KafkaMessage(System.currentTimeMillis(), om.replyToken, messge.asJson, messge.getClass.getTypeName))
       })
       context.stop(self)
   }

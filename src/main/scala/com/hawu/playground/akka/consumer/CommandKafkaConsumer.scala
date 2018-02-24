@@ -8,7 +8,7 @@ import scala.collection.JavaConverters._
 
 case object ListenForNewMessage
 case class KafkaSerializedMessage(message: String)
-class CommandKafkaConsumer(commandReceiver: ActorRef, replyReceiver: ActorRef) extends Actor with ActorLogging {
+class CommandKafkaConsumer(replyReceiver: ActorRef, commandReceiver: ActorRef) extends Actor with ActorLogging {
 
   val commandReplyTopic = context.system.settings.config.getString("playground.command.kafka.replytopic")
   val commandTopic = context.system.settings.config.getString("playground.command.kafka.topic")
@@ -31,8 +31,10 @@ class CommandKafkaConsumer(commandReceiver: ActorRef, replyReceiver: ActorRef) e
         val messages = consumer.poll(pollTime.getOrElse(1000)) //I hate this, but its blocking operation (polling system for kafka)
         messages.iterator.asScala.foreach(item => {
           item.topic match {
-            case `commandReplyTopic` => replyReceiver ! KafkaSerializedMessage(item.value())
-            case `commandTopic` => commandReceiver ! KafkaSerializedMessage(item.value())
+            case `commandReplyTopic` =>
+              replyReceiver ! KafkaSerializedMessage(item.value())
+            case `commandTopic` =>
+                commandReceiver ! KafkaSerializedMessage(item.value())
             case _ => log.error("Got message with unknown topic")
           }
         })

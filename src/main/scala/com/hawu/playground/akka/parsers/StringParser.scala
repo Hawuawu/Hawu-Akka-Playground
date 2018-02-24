@@ -22,6 +22,10 @@ object StringParser {
   val characterScalaName = classOf[scala.Char].getName
   val booleanScalaName = classOf[scala.Boolean].getName
 
+  val scalaListName = classOf[scala.collection.immutable.List[_]].getName
+  val scalaSeqName = classOf[scala.collection.immutable.Seq[_]].getName
+  val scalaSetName = classOf[scala.collection.immutable.Set[_]].getName
+
   def isStringParseable_?(t: String): Boolean = getClass.getDeclaredFields.exists(f => {
     f.setAccessible(true)
     val splitted = t.split("\\.")
@@ -31,7 +35,9 @@ object StringParser {
     } else {
       f.getName.toLowerCase.contains(t)
     }
-  })
+  }) && !isCollectionParsable_?(t)
+
+  def isCollectionParsable_?(t: String): Boolean = List(scalaListName, scalaSeqName, scalaSetName).contains(t)
 
   def apply(t: String, value: String): Any = {
     t match {
@@ -85,6 +91,15 @@ object StringParser {
 
       case `booleanScalaName` =>
         value.toBoolean
+
+      case `scalaListName` =>
+        List()
+
+      case `scalaSeqName` =>
+        Seq()
+
+      case `scalaSetName` =>
+        Set()
     }
   }
 }

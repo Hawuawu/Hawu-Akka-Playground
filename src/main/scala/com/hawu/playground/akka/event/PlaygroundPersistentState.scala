@@ -28,7 +28,6 @@ class PlaygroundPersistentState() extends Actor with ActorLogging {
       } else {
       val events = msg.command()
       sender ! GroupCreated(msg.groupId)
-
     }
 
    case msg: DeleteGroupById =>

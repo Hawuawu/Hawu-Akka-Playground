@@ -33,7 +33,7 @@ Apache kafka consists of 4 parts:
 Installed local VM - Virtual Box, where I'm running kafka server and zookeper.
 
 Installed CentOS 7, Zookeeper, Apache Kafka and tested
-- For development purpose i disabled firewall.
+- For development purpose i disabled firewall.	
 
 [Kavka server](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_server.png)
 - [Kafka producer](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_test_producer.png)
@@ -44,26 +44,9 @@ Installed CentOS 7, Zookeeper, Apache Kafka and tested
 
 [Diagram for kafka communication](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/Kafka_layer.png)
 
-**Custom string serializer and deserializer**
+**Spray json case classes serializer and deserializer**
 
-Created serializer supporting java and scala primitive formats using new reflection API, native scala xml and case classes. Supports case serialization and sererialization with attributes with primitive type/
-- java.lang.Byte
-- java.lang.Short
-- java.lang.Character
-- java.lang.Int
-- java.lang.Float
-- java.lang.Double
-- java.lang.Long
-- java.lang.String
-- java.lang.Boolean
-
-- scala.Byte
-- scala.Char
-- scala.Int
-- scala.Float
-- scala.Double
-- scala.Long
-- scala.Boolean
+Serializating commands throught spray json library.
 
 **Config File**
 
