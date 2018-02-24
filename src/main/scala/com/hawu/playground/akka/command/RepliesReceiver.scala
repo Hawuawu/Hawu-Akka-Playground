@@ -9,7 +9,7 @@ class RepliesReceiver(commandReplyProxy: ActorRef) extends Actor with ActorLoggi
     case msg: KafkaSerializedMessage =>
       val buildedKafkaMessage = KafkaMessageBuilder(msg.message)
       if(buildedKafkaMessage.isDefined) {
-        context.actorOf(Props(classOf[ReplyReceiveWorker], commandReplyProxy, buildedKafkaMessage.get))
+        context.actorOf(Props(classOf[ReplyReceiveWorker], commandReplyProxy, buildedKafkaMessage.get)) ! buildedKafkaMessage.get
       } else {
         log.error("Cannot build kafka message from {}", msg)
       }

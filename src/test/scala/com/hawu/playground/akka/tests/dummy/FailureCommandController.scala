@@ -2,6 +2,8 @@ package com.hawu.playground.akka.tests.dummy
 
 import akka.actor.{Actor, ActorLogging}
 import com.hawu.playground.akka.command._
+import com.hawu.playground.akka.producer.KafkaMessage
+import com.hawu.playground.akka.utils.Serialization
 
 class FailureCommandController(
                                 cannotCreateGroupReason: String,
@@ -11,16 +13,25 @@ class FailureCommandController(
     case GetMessagesForGroup(g) =>
       sender ! GotMessages(g, List())
 
-    case GetAllMessages =>
+    case msf: GetAllMessages =>
       sender ! GotMessages("", List())
 
     case CreateGroup(groupId) =>
-      sender ! CannotCreateGroup(groupId, cannotCreateGroupReason)
+      val msg = CannotCreateGroup(groupId, cannotCreateGroupReason)
+      Serialization(msg).map(serialized => {
+        sender ! KafkaMessage(0l, "", serialized, msg.getClass.getTypeName)
+      })
 
     case DeleteGroupById(groupId) =>
-      sender ! CannotDeleteGroupById(groupId, cannotDeleteGroupReason)
+      val msg = CannotDeleteGroupById(groupId, cannotDeleteGroupReason)
+      Serialization(msg).map(serialized => {
+        sender ! KafkaMessage(0l, "", serialized, msg.getClass.getTypeName)
+      })
 
     case AssignMessageToGroup(group, message) =>
-      sender ! AssignMessageToGroupFailed(group, message,cannotAssignMessageToGroupReason)
+      val msg = AssignMessageToGroupFailed(group, message, cannotAssignMessageToGroupReason)
+      Serialization(msg).map(serialized => {
+        sender ! KafkaMessage(0l, "", serialized, msg.getClass.getTypeName)
+      })
   }
 }

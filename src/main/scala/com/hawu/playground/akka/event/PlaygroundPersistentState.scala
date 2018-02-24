@@ -8,10 +8,13 @@ import scala.collection.immutable.HashMap
 
 class PlaygroundPersistentState() extends Actor with ActorLogging {
 
-  var registry: HashMap[String, List[String]] = HashMap()
+  var registry: HashMap[String, List[String]] = HashMap(
+    "group1" -> List("message1", "message2"),
+    "group2" -> List("message1", "message2")
+  )
 
   def receive = {
-   case msg: GetAllMessages =>
+   case msg: GetAllMessages   =>
     sender ! GotMessages("", registry.flatMap(m => m._2).toList)
 
    case msg: GetMessagesForGroup =>

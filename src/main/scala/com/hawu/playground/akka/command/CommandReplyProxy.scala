@@ -2,6 +2,7 @@ package com.hawu.playground.akka.command
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import com.hawu.playground.akka.producer.KafkaMessage
+import com.hawu.playground.akka.utils.Serialization
 
 import scala.concurrent.duration._
 

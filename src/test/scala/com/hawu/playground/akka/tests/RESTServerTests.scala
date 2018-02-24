@@ -11,6 +11,7 @@ import com.hawu.playground.akka.http.server.RESTServer
 import com.hawu.playground.akka.tests.dummy.{FailureCommandController, SuccessCommandController}
 import org.scalatest.{AsyncFlatSpec, FlatSpec}
 import akka.stream.ActorMaterializer
+import com.hawu.playground.akka.command._
 import com.hawu.playground.akka.utils.HttpsConnectionFromKeystore
 
 import scala.concurrent.{Await, Future}
@@ -37,6 +38,23 @@ object ActorSystemTerminator {
 }
 
 class RESTServerTests extends AsyncFlatSpec  {
+  CommandsRegisty (
+    Seq(
+      GetAllMessages(),
+      GetMessagesForGroup(),
+      DeleteGroupById(),
+      GotMessages(),
+      AssignMessageToGroup(),
+      AssignMessageToGroupCompleted(),
+      AssignMessageToGroupFailed(),
+      GroupByIdDeleted(),
+      CannotDeleteGroupById(),
+      CreateGroup(),
+      GroupCreated(),
+      CannotCreateGroup()
+    )
+  )
+
   "RESTClient" should "send GetMessagesForGroup and get 201 response" in {
 
     var actorSystem: Option[ActorSystem] = None

@@ -30,7 +30,7 @@ class CommandConsumerWorker(persistenceActor: ActorRef, replyProducer: ActorRef)
       originalMessage = Some(message)
 
       val deregistred = CommandsRegisty(message.objectName)
-      val deserialized = deregistred.map(found => {
+      val deserialized = deregistred.flatMap(found => {
         found match {
           case json: KafkaJSONDeserializable =>
             Some(json.fromJson(message.serializedMessage))
