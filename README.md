@@ -26,7 +26,7 @@ Apache kafka consists of 4 parts:
 - Message queue **Producer** which is encapsulated by actor [here](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/scala/com/hawu/playground/akka/producer/CommandKafkaProducer.scala)
 - Message queue **Consumer** which is created is encapsulated by actor [here](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/scala/com/hawu/playground/akka/consumer/CommandKafkaConsumer.scala)
 
-- Installed local VM - Virtual Box, where I'm running kafka server and zookeper.
+Installed local VM - Virtual Box, where I'm running kafka server and zookeper.
 
 Installed CentOS 7, Zookeeper, Apache Kafka and tested
 - For development purpose i disabled firewall.
@@ -44,7 +44,7 @@ Installed CentOS 7, Zookeeper, Apache Kafka and tested
 
 Is located [here](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/resources/application.conf)
 
-_ Improved scala tests for using async flat spec , no more awai synchronization _
+_Improved scala tests for using async flat spec , no more await synchronization_
 
 
 
