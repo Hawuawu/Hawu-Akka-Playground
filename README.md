@@ -18,11 +18,14 @@ You can find RESTServer services definition at following url's:
 , [Unit tests](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/RESTServerTests.scala)
 \]
 
+**Self-signed certificate**
+REST service are secured by self-signed certificate which I had to generate and put into keystore.
+
 **Apache Kafka**
 
 Apache kafka consists of 4 parts:
 - Cluster supervision app **Zookeeper**
-- Kafka server which suplies **Broker**'s
+- Kafka server which suplies **Broker**
 - Message queue **Producer** which is encapsulated by actor [here](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/scala/com/hawu/playground/akka/producer/CommandKafkaProducer.scala)
 - Message queue **Consumer** which is created is encapsulated by actor [here](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/scala/com/hawu/playground/akka/consumer/CommandKafkaConsumer.scala)
 
