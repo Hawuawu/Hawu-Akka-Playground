@@ -16,6 +16,9 @@ class CommandConsumerSideReceiver(persistenceActor: ActorRef, replyProducer: Act
       } else {
         log.error("Cannot build kafka message from {}", msg)
       }
+
+    case other =>
+      log.error("Got unknown message")
   }
 }
 

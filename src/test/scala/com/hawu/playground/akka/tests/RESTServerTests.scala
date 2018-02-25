@@ -14,8 +14,10 @@ import akka.stream.ActorMaterializer
 import com.hawu.playground.akka.command._
 import com.hawu.playground.akka.utils.HttpsConnectionFromKeystore
 
-import scala.concurrent.{Await, Future}
-import scala.util.{Failure, Success}
+import scala.concurrent.Future
+
+import scala.concurrent.Await
+import akka.util.Timeout
 import scala.concurrent.duration._
 
 object ActorSystemTerminator {
@@ -32,7 +34,11 @@ object ActorSystemTerminator {
       }))
 
     if (restServerBinding.isEmpty) {
-      actorSystem.map(as => as.terminate())
+      actorSystem.map(as => {
+
+        implicit val timeout = Timeout(5 seconds)
+        Await.result(as.terminate, timeout.duration)
+      })
     }
   }
 }
@@ -97,7 +103,7 @@ class RESTServerTests extends AsyncFlatSpec  {
 
   }
 
-  "RESTClienr" should "send GetAllMessages when none group specified" in {
+  "RESTClient" should "send GetAllMessages when none group specified" in {
     var actorSystem: Option[ActorSystem] = None
     var restServerBinding: Option[Future[ServerBinding]] = None
 
@@ -133,7 +139,7 @@ class RESTServerTests extends AsyncFlatSpec  {
     }
   }
 
-  "RESTClienr" should "send AssignMessageToGroup on put request and get 201 response" in {
+  "RESTClient" should "send AssignMessageToGroup on put request and get 201 response" in {
 
     var actorSystem: Option[ActorSystem] = None
     var restServerBinding: Option[Future[ServerBinding]] = None
@@ -163,7 +169,7 @@ class RESTServerTests extends AsyncFlatSpec  {
     }
   }
 
-  "RESTClienr" should "send AssignMessageToGroup and get failure reason and get 500 response" in {
+  "RESTClient" should "send AssignMessageToGroup and get failure reason and get 500 response" in {
 
     var actorSystem: Option[ActorSystem] = None
     var restServerBinding: Option[Future[ServerBinding]] = None
@@ -201,7 +207,7 @@ class RESTServerTests extends AsyncFlatSpec  {
     }
   }
 
-  "RESTClienr" should "send CreateGroup and get 201 response" in {
+  "RESTClient" should "send CreateGroup and get 201 response" in {
 
     var actorSystem: Option[ActorSystem] = None
     var restServerBinding: Option[Future[ServerBinding]] = None
@@ -231,7 +237,7 @@ class RESTServerTests extends AsyncFlatSpec  {
     }
   }
 
-  "RESTClienr" should "send CreateGroup and get failure reason and get 500 response " in {
+  "RESTClient" should "send CreateGroup and get failure reason and get 500 response " in {
 
     var actorSystem: Option[ActorSystem] = None
     var restServerBinding: Option[Future[ServerBinding]] = None
@@ -269,7 +275,7 @@ class RESTServerTests extends AsyncFlatSpec  {
     }
   }
 
-  "RESTClienr" should "send DeleteGroup and get 201 response" in {
+  "RESTClient" should "send DeleteGroup and get 201 response" in {
 
     var actorSystem: Option[ActorSystem] = None
     var restServerBinding: Option[Future[ServerBinding]] = None
@@ -299,7 +305,7 @@ class RESTServerTests extends AsyncFlatSpec  {
     }
   }
 
-  "RESTClienr" should "send DeleteGroup and get failure reason and get 500 response " in {
+  "RESTClient" should "send DeleteGroup and get failure reason and get 500 response " in {
 
     var actorSystem: Option[ActorSystem] = None
     var restServerBinding: Option[Future[ServerBinding]] = None

@@ -1,17 +1,25 @@
 package com.hawu.playground.akka.tests
 
 import akka.actor.{ActorSystem, Props}
+import akka.http.scaladsl.model.HttpResponse
 import com.hawu.playground.akka.consumer.CommandKafkaConsumer
 import com.hawu.playground.akka.producer.{CommandKafkaProducer, KafkaMessage, SendKafkaMessageToTopic}
 import com.hawu.playground.akka.tests.dummy.{DummyCommandAndRepliesReceiver, WaitForNumberOfMessage, WaitingDone}
 import org.scalatest.{AsyncFlatSpec, FlatSpec}
 import akka.pattern._
+import akka.stream.ActorMaterializer
 import akka.util.Timeout
-import scala.concurrent.duration._
+import com.hawu.playground.akka.ApplicationContextBuilder
+import com.hawu.playground.akka.http.client.RESTClient
 
+import scala.concurrent.duration._
 import scala.concurrent.Future
 
-class KafkaServerTests extends AsyncFlatSpec {
+/*
+* This tests will only run when there is a broker, kafka layer running
+ */
+
+class KafkaServerTests extends FlatSpec {
   "Kafka producer and consumer" should "send and receive messages" in {
     var actorSystem: Option[ActorSystem] = None
 
@@ -32,6 +40,7 @@ class KafkaServerTests extends AsyncFlatSpec {
 
       import scala.concurrent.ExecutionContext.Implicits.global
       implicit val timeout = Timeout(5 seconds)
+
       (dummyCommandAndRepliesReceiver ? WaitForNumberOfMessage(100)) map {
           case WaitingDone => succeed
           case akka.actor.ReceiveTimeout => fail
@@ -40,6 +49,7 @@ class KafkaServerTests extends AsyncFlatSpec {
     } catch {
       case t: Throwable =>
         actorSystem.map(as => as.log.error("Exception while starting entrypoint {}", t))
+        import scala.concurrent.ExecutionContext.Implicits.global
         Future{ fail }
     }
  }

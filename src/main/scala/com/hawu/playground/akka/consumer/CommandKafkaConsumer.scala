@@ -32,10 +32,11 @@ class CommandKafkaConsumer(replyReceiver: ActorRef, commandReceiver: ActorRef) e
         messages.iterator.asScala.foreach(item => {
           item.topic match {
             case `commandReplyTopic` =>
-              replyReceiver ! KafkaSerializedMessage(item.value())
+              replyReceiver ! KafkaSerializedMessage(item.value)
             case `commandTopic` =>
-                commandReceiver ! KafkaSerializedMessage(item.value())
-            case _ => log.error("Got message with unknown topic")
+                commandReceiver ! KafkaSerializedMessage(item.value)
+            case _ =>
+              log.error("Got message with unknown topic")
           }
         })
       } catch {

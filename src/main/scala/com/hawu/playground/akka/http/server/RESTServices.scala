@@ -81,7 +81,7 @@ class RESTServices(commandController: ActorRef) extends FutureDirectives with Di
             Serialization(commandFound.asInstanceOf[KafkaJSONDeserializable], msg.serializedMessage).map(m =>{
               m match {
                 case newMsg: CannotDeleteGroupById =>
-                  complete(HttpResponse(500, entity = newMsg.reason))
+                  complete(HttpResponse(501, entity = newMsg.reason))
 
                 case newMsg: GroupByIdDeleted =>
                   complete(HttpResponse(201))
@@ -117,7 +117,7 @@ class RESTServices(commandController: ActorRef) extends FutureDirectives with Di
               Serialization(commandFound.asInstanceOf[KafkaJSONDeserializable], msg.serializedMessage).map(m =>{
                 m match {
                   case newMsg: CannotCreateGroup =>
-                    complete(HttpResponse(500, entity = newMsg.reason))
+                    complete(HttpResponse(501, entity = newMsg.reason))
 
                   case newMsg: GroupCreated =>
                     complete(HttpResponse(201))
@@ -148,7 +148,7 @@ class RESTServices(commandController: ActorRef) extends FutureDirectives with Di
             Serialization(commandFound.asInstanceOf[KafkaJSONDeserializable], msg.serializedMessage).map(m =>{
               m match {
                 case newMsg: AssignMessageToGroupFailed =>
-                  complete(HttpResponse(500, entity = newMsg.reason))
+                  complete(HttpResponse(501, entity = newMsg.reason))
 
                 case newMsg: AssignMessageToGroupCompleted =>
                   complete(HttpResponse(201))

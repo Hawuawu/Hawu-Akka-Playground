@@ -12,11 +12,9 @@ import org.apache.kafka.clients.producer.KafkaProducer
 
 import scala.concurrent.Future
 
-object Main extends App {
-  var actorSystem: Option[ActorSystem] = None
-  var restServerBinding: Option[Future[ServerBinding]] = None
-
-  try {
+case class ApplicationContext(actorSystem: Option[ActorSystem] = None, restServerBinding: Option[Future[ServerBinding]] = None)
+object ApplicationContextBuilder {
+  def build(actoSystemName: String, https: Boolean = false): ApplicationContext = {
     CommandsRegisty (
       Seq(
         GetAllMessages(),
@@ -34,7 +32,7 @@ object Main extends App {
       )
     )
 
-    val system = ActorSystem("Hawus_space")
+    val system = ActorSystem(actoSystemName)
     import scala.concurrent.ExecutionContext.Implicits.global
     system.whenTerminated.onComplete {
       completion =>
@@ -44,9 +42,6 @@ object Main extends App {
     val host = system.settings.config.getString("playground.rest.server.host")
     val port = system.settings.config.getInt("playground.rest.server.port")
     val certPass = system.settings.config.getString("playground.cert.pass")
-
-    actorSystem = Some(system)
-
 
     val persitenceAcor = system.actorOf(Props[PlaygroundPersistentState])
 
@@ -58,17 +53,40 @@ object Main extends App {
     val repliesReceiver = system.actorOf(Props(classOf[RepliesReceiver], commandReplyProxy))
     system.actorOf(Props(classOf[CommandKafkaConsumer], repliesReceiver, commandsReceiver))
 
-    Some(RESTServer(port, host, commandsController, system, certPass, true))
+    if(https) {
+      val restServerBinding = Some(RESTServer(port, host, commandsController, system, certPass, https))
+      ApplicationContext(Some(system), restServerBinding)
+    } else {
+      val restServerBinding = Some(RESTServer(port, host, commandsController, system))
+      ApplicationContext(Some(system), restServerBinding)
+    }
+  }
+}
 
-    system.log.debug("Press enter to quit!")
+object Main extends App {
+
+  var context: Option[ApplicationContext] = None
+
+  try {
+    context = Some(ApplicationContextBuilder.build("Hawus_space", https = true))
+    context.map( ctx => {
+      ctx.actorSystem.map(system => {
+        system.log.debug("Press enter to quit!")
+      })
+    })
+
     scala.io.StdIn.readLine
   } catch {
     case t: Throwable =>
-      actorSystem.map(as => as.log.error("Exception while starting entrypoint {}", t))
+      context.map( ctx => {
+        ctx.actorSystem.map(system => {
+          system.log.error("Exception while starting entrypoint {}", t)
+        })
+      })
   }
 
-  restServerBinding
-    .map(boxedBinding => actorSystem.map(as => {
+  context.map(ctx => {
+    ctx.restServerBinding.map(boxedBinding => ctx.actorSystem.map(as => {
 
       implicit val executionContext = as.dispatcher
 
@@ -78,4 +96,6 @@ object Main extends App {
           as.terminate
         )
     }))
+  })
+
 }

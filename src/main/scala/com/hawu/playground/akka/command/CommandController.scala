@@ -23,8 +23,9 @@ class CommandController(kafkaProducer: ActorRef, replyProxy: ActorRef) extends A
           )
 
           Serialization(command).map(serializedCommand => {
+            val commandObjectName = command.getClass.getTypeName
             replyProxy.tell(RegisterKafkaMessageForReply(KafkaMessage(timestamp, hash, serializedCommand, command.getClass.getTypeName)), sender)
-            kafkaProducer ! SendKafkaMessageToTopic(commandTopic, KafkaMessage(timestamp, hash, serializedCommand, command.getClass.getTypeName))
+            kafkaProducer ! SendKafkaMessageToTopic(commandTopic, KafkaMessage(timestamp, hash, serializedCommand, commandObjectName))
           })
 
         case other =>

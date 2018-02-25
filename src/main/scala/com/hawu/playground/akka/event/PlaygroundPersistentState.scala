@@ -15,7 +15,7 @@ class PlaygroundPersistentState() extends Actor with ActorLogging {
 
   def receive = {
    case msg: GetAllMessages   =>
-    sender ! GotMessages("", registry.flatMap(m => m._2).toList)
+    sender !  GotMessages("", registry.flatMap(m => m._2).toList)
 
    case msg: GetMessagesForGroup =>
      sender ! GotMessages(
@@ -29,25 +29,25 @@ class PlaygroundPersistentState() extends Actor with ActorLogging {
       {
         sender ! CannotCreateGroup(msg.groupId, "Already exists")
       } else {
-      val events = msg.command()
-      sender ! GroupCreated(msg.groupId)
+        msg.command().map(e => self ! e)
+        sender ! GroupCreated(msg.groupId)
     }
 
    case msg: DeleteGroupById =>
-     if(registry.exists(r => r._1 == msg.groupId))
+     if(!registry.exists(r => r._1 == msg.groupId))
      {
        sender ! CannotDeleteGroupById(msg.groupId, "Group doens't exists")
      } else {
-       val events = msg.command()
+       msg.command().map(e => self ! e)
        sender ! GroupByIdDeleted(msg.groupId)
      }
 
    case msg: AssignMessageToGroup =>
-     if(registry.exists(r => r._1 == msg.groupId))
+     if(!registry.exists(r => r._1 == msg.groupId))
      {
        sender ! AssignMessageToGroupFailed(msg.groupId, msg.message, "Group doens't exists")
      } else {
-       val events = msg.command()
+       msg.command().map(e => self ! e)
        sender ! AssignMessageToGroupCompleted(msg.groupId, msg.message)
      }
 
