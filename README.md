@@ -63,7 +63,7 @@ _It needs to hava broker - kafka server running_
 - [Delete group](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/DeleteGroupTest.scala)
 - [Assign messages to group](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/AssignMessageToGroupTest.scala)
 
-_Improved scala tests for using async flat spec , no more await synchronization_
+_Improved scala tests for using async flat spec , no more await synchronization, but there are cases when I need synchronization_
 
 
 
