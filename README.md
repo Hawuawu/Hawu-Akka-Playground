@@ -52,6 +52,17 @@ Serializating commands throught spray json library.
 
 Is located [here](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/resources/application.conf)
 
+
+**Whole roundtrip unit test**
+
+_It needs to hava broker - kafka server running_
+
+- [Get all messages](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/GetAllMessagesTest.scala)
+- [Get messages for group](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/ShowMessagesForGroupTest.scala)
+- [Create group](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/CreateGroupsTest.scala)
+- [Delete group](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/DeleteGroupTest.scala)
+- [Assign messages to group](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/AssignMessageToGroupTest.scala)
+
 _Improved scala tests for using async flat spec , no more await synchronization_
 
 
