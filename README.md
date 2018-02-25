@@ -35,7 +35,7 @@ Installed local VM - Virtual Box, where I'm running kafka server and zookeper.
 Installed CentOS 7, Zookeeper, Apache Kafka and tested
 - For development purpose i disabled firewall.	
 
-[Kavka server](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_server.png)
+- [Kavka server](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_server.png)
 - [Kafka producer](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_test_producer.png)
 - [Kafka consumer](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_test_consumer.png)
 - Followed article with installation of [kafka server](https://www.vultr.com/docs/how-to-install-apache-kafka-on-centos-7)
