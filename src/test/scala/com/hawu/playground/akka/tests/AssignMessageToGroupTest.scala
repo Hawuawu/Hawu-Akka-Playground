@@ -6,8 +6,8 @@ import com.hawu.playground.akka.http.client.RESTClient
 import org.scalatest.AsyncFlatSpec
 
 import scala.concurrent.{Await, Future}
-import akka.pattern.ask
-import akka.stream.ActorMaterializer
+//import akka.pattern.ask // UNUSED
+//import akka.stream.ActorMaterializer // UNUSED
 import akka.util.Timeout
 
 import scala.concurrent.duration._
@@ -38,11 +38,11 @@ class AssignMessageToGroupTest extends AsyncFlatSpec {
     val future3 = client.assignMessaggeToGroupId("group", "message")
     future3 map {
       case resp: HttpResponse =>
-        implicit val actorSystem = system
-        implicit val materializer = ActorMaterializer()
+        //implicit val actorSystem = system // UNUSED
+        //implicit val materializer = ActorMaterializer() // UNUSED
 
         ActorSystemTerminator(ctx.actorSystem, ctx.restServerBinding)
         assert(resp.status.intValue == 201)
     }
-  }).getOrElse(Future {fail})
+  }).getOrElse(Future { fail }) // FIXME replace with either `Future.successful` or `Future.failed`
 }

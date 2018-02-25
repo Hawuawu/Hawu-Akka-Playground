@@ -14,6 +14,7 @@ import scala.concurrent.duration._
 
 
 class ShowMessagesForGroupTest extends AsyncFlatSpec {
+
   it should "show message for group" in {
     val ctx = ApplicationContextBuilder.build("Hawus_space2")
 
@@ -31,6 +32,7 @@ class ShowMessagesForGroupTest extends AsyncFlatSpec {
           ActorSystemTerminator(ctx.actorSystem, ctx.restServerBinding)
           assert(resp.status.intValue == 201)
       }
-    }).getOrElse(Future{fail})
+    }).getOrElse(Future { fail }) // FIXME replace with either `Future.successful` or `Future.failed`
   }
+
 }

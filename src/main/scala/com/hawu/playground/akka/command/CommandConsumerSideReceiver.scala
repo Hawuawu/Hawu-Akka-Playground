@@ -3,7 +3,7 @@ package com.hawu.playground.akka.command
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import com.hawu.playground.akka.consumer.KafkaSerializedMessage
 import com.hawu.playground.akka.producer.{KafkaMessage, KafkaMessageBuilder, SendKafkaMessageToTopic}
-import com.hawu.playground.akka.utils.Serialization
+//import com.hawu.playground.akka.utils.Serialization // UNUSED
 
 import scala.util.matching.Regex
 

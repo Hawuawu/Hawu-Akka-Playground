@@ -2,7 +2,7 @@ package com.hawu.playground.akka.command
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import com.hawu.playground.akka.producer.KafkaMessage
-import com.hawu.playground.akka.utils.Serialization
+//import com.hawu.playground.akka.utils.Serialization // UNUSED
 
 import scala.concurrent.duration._
 
@@ -24,7 +24,7 @@ class CommandReplyProxy extends Actor with ActorLogging {
         ) :: registry
 
     case msg: GotReplyForKafkaMessage =>
-      registry = registry.filter(f => if(f.message.replyToken == msg.reply.replyToken){
+      registry = registry.filter(f => if (f.message.replyToken == msg.reply.replyToken) {
         f.replyTo ! msg.reply
         context.stop(f.timeouter)
         false
@@ -33,7 +33,7 @@ class CommandReplyProxy extends Actor with ActorLogging {
       })
 
     case CommandTimeouted =>
-      registry = registry.filter(f => if(f.timeouter == sender){
+      registry = registry.filter(f => if (f.timeouter == sender) {
         f.replyTo ! CommandTimeouted
         context.stop(f.timeouter)
         false

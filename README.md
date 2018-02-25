@@ -5,7 +5,7 @@ Repository for playing with akka-http, akka-persistence, akka-streams, apache-ka
 **Akka-http**
 Using for REST services which are:
 - host:port - GET
-- host:port - GET with groupid param 
+- host:port - GET with groupid param
 - host:port - POST with groupId param
 - host:port - DELETE with groupId param
 - host:port - PUT with groupId and message param
@@ -33,9 +33,9 @@ Apache kafka consists of 4 parts:
 Installed local VM - Virtual Box, where I'm running kafka server and zookeper.
 
 Installed CentOS 7, Zookeeper, Apache Kafka and tested
-- For development purpose i disabled firewall.	
+- For development purpose i disabled firewall.
 
-- [Kavka server](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_server.png)
+- [Kafka server](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_server.png)
 - [Kafka producer](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_test_producer.png)
 - [Kafka consumer](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_test_consumer.png)
 - Followed article with installation of [kafka server](https://www.vultr.com/docs/how-to-install-apache-kafka-on-centos-7)
@@ -52,10 +52,19 @@ Serializating commands throught spray json library.
 
 Is located [here](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/resources/application.conf)
 
+**Running in docker**
+
+test
+
+`docker-compose run --rm sbt test`
+
+run
+
+`docker-compose run --rm --service-ports sbt run`
 
 **Whole roundtrip unit test**
 
-_It needs to hava broker - kafka server running_
+_It needs to have broker - kafka server running_
 
 - [Get all messages](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/GetAllMessagesTest.scala)
 - [Get messages for group](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/ShowMessagesForGroupTest.scala)

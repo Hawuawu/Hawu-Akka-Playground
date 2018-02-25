@@ -1,0 +1,26 @@
+version: "3.2"
+
+services:
+
+  sbt:
+    image: hseeberger/scala-sbt
+    volumes:
+      - .:/root
+      - ~/.ivy2:/root/.ivy2
+      - ~/.sbt:/root/.sbt
+    depends_on:
+      - kafka
+    environment:
+      - KAFKA_SERVERS=kafka:9092
+    entrypoint: ["sbt"]
+
+  kafka:
+    image: blacktop/kafka
+    hostname: kafka
+    container_name: kafka
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_ADVERTISED_PORT=9092

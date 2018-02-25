@@ -1,22 +1,15 @@
 package com.hawu.playground.akka.utils
 
+import scala.util.Try
 import com.hawu.playground.akka.command.{KafkaJSONDeserializable, KafkaJSONSerializable}
 
 object Serialization {
   def apply(item: KafkaJSONSerializable): Option[String] = {
-    try {
-      Some(item.asJson)
-    } catch {
-      case e: Exception => None
-    }
+    Try(item.asJson).toOption
   }
 
   def apply(toDeserialize: KafkaJSONDeserializable, item: String): Option[KafkaJSONDeserializable] = {
-    try{
-      Some(toDeserialize.fromJson(item))
-    } catch  {
-      case e: Exception => None
-    }
+    Try(toDeserialize.fromJson(item)).toOption
   }
 }
 

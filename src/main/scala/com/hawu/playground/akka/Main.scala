@@ -3,12 +3,12 @@ package com.hawu.playground.akka
 import akka.actor.{ActorSystem, Props}
 import akka.http.scaladsl.Http.ServerBinding
 import com.hawu.playground.akka.command._
-import com.hawu.playground.akka.consumer.{CommandKafkaConsumer, ConsumerFactory}
+import com.hawu.playground.akka.consumer.{CommandKafkaConsumer /*, ConsumerFactory /*UNUSED*/ */}
 import com.hawu.playground.akka.event.PlaygroundPersistentState
 import com.hawu.playground.akka.http.server.RESTServer
-import com.hawu.playground.akka.producer.{CommandKafkaProducer, ProducerFactory}
-import org.apache.kafka.clients.consumer.KafkaConsumer
-import org.apache.kafka.clients.producer.KafkaProducer
+import com.hawu.playground.akka.producer.{CommandKafkaProducer /*, ProducerFactory /*UNUSED*/ */}
+//import org.apache.kafka.clients.consumer.KafkaConsumer // UNUSED
+//import org.apache.kafka.clients.producer.KafkaProducer // UNUSED
 
 import scala.concurrent.Future
 
@@ -69,7 +69,7 @@ object Main extends App {
 
   try {
     context = Some(ApplicationContextBuilder.build("Hawus_space", https = true))
-    context.map( ctx => {
+    context.map(ctx => {
       ctx.actorSystem.map(system => {
         system.log.debug("Press enter to quit!")
       })
@@ -78,7 +78,7 @@ object Main extends App {
     scala.io.StdIn.readLine
   } catch {
     case t: Throwable =>
-      context.map( ctx => {
+      context.map(ctx => {
         ctx.actorSystem.map(system => {
           system.log.error("Exception while starting entrypoint {}", t)
         })
