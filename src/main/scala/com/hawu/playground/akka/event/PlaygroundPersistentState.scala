@@ -8,68 +8,63 @@ import scala.collection.immutable.HashMap
 
 class PlaygroundPersistentState() extends Actor with ActorLogging {
 
+  // FIXME really dislike this mutation, use actor.become
   var registry: HashMap[String, List[String]] = HashMap(
     "group1" -> List("message1", "message2"),
     "group2" -> List("message1", "message2")
   )
 
   def receive = {
-   case msg: GetAllMessages   =>
-    sender !  GotMessages("", registry.flatMap(m => m._2).toList)
 
-   case msg: GetMessagesForGroup =>
-     sender ! GotMessages(
-       msg.groupdId,
-       registry
-         .find(f =>f._1 == msg.groupdId).map(m => m._2).getOrElse(List())
-     )
+    case msg: GetAllMessages   =>
+      sender !  GotMessages("", registry.flatMap(m => m._2).toList)
 
-   case msg: CreateGroup =>
-    if(registry.exists(r => r._1 == msg.groupId))
-      {
-        sender ! CannotCreateGroup(msg.groupId, "Already exists")
-      } else {
-        msg.command().map(e => self ! e)
-        sender ! GroupCreated(msg.groupId)
-    }
+    case msg: GetMessagesForGroup =>
+      sender ! GotMessages(
+        msg.groupdId,
+        registry
+          .find(_._1 == msg.groupdId)
+          .map(_._2)
+          .getOrElse(Nil)
+      )
 
-   case msg: DeleteGroupById =>
-     if(!registry.exists(r => r._1 == msg.groupId))
-     {
-       sender ! CannotDeleteGroupById(msg.groupId, "Group doens't exists")
-     } else {
-       msg.command().map(e => self ! e)
-       sender ! GroupByIdDeleted(msg.groupId)
-     }
+    case msg: CreateGroup if (registry.exists(_._1 == msg.groupId)) =>
+      sender ! CannotCreateGroup(msg.groupId, "Already exists")
 
-   case msg: AssignMessageToGroup =>
-     if(!registry.exists(r => r._1 == msg.groupId))
-     {
-       sender ! AssignMessageToGroupFailed(msg.groupId, msg.message, "Group doens't exists")
-     } else {
-       msg.command().map(e => self ! e)
-       sender ! AssignMessageToGroupCompleted(msg.groupId, msg.message)
-     }
+    case msg: CreateGroup =>
+      msg.command.foreach(self ! _)
+      sender ! GroupCreated(msg.groupId)
 
-   case msg: PlaygroundStateChangeEvent =>
-      msg match {
-        case m: CreatedGroup =>
-          registry = registry + (m.groupId -> List())
+    case msg: DeleteGroupById if (registry.exists(_._1 == msg.groupId)) =>
+      msg.command.foreach(self ! _)
+      sender ! GroupByIdDeleted(msg.groupId)
 
-        case m: DeletedGroup =>
-          registry = registry.filterNot(f => f._1 == m.groupId)
+    case msg: DeleteGroupById =>
+      sender ! CannotDeleteGroupById(msg.groupId, "Group doens't exists")
 
-        case m: CreatedMessage =>
-          registry =
-            registry
-              .filterNot(f => f._1 == m.groupId) +
-              registry
-              .find(f => f._1 == m)
-                .map(found => found._1 -> (m.message :: found._2.filterNot(f => f == m.message)))
-                  .getOrElse(m.groupId -> List(m.message))
+    case msg: AssignMessageToGroup if (registry.exists(_._1 == msg.groupId)) =>
+      msg.command.foreach(self ! _)
+      sender ! AssignMessageToGroupCompleted(msg.groupId, msg.message)
 
-        case other =>
-          log.error("Got unknown event!! {}", other)
-      }
+    case msg: AssignMessageToGroup =>
+      sender ! AssignMessageToGroupFailed(msg.groupId, msg.message, "Group doens't exists")
+
+    case msg: CreatedGroup =>
+      registry = registry + (msg.groupId -> Nil)
+
+    case msg: DeletedGroup =>
+      registry = registry.filterNot(_._1 == msg.groupId)
+
+    case msg: CreatedMessage =>
+      registry =
+        registry.filterNot(_._1 == msg.groupId) + (
+        registry
+        .find(_._1 == msg)
+          .map(found => found._1 -> (msg.message :: found._2.filterNot(_ == msg.message)))
+          .getOrElse(msg.groupId -> List(msg.message))
+        )
+
+    case other =>
+      log.error("Got unknown event!! {}", other)
   }
 }

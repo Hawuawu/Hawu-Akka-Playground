@@ -22,20 +22,26 @@ class CommandsSerializationTests extends FlatSpec{
       )
     )
 
-      assert(CommandsRegisty(GetAllMessages().getClass.getTypeName).isDefined)
-      assert(CommandsRegisty(GetMessagesForGroup().getClass.getTypeName).isDefined)
-      assert(CommandsRegisty(DeleteGroupById().getClass.getTypeName).isDefined)
-      assert(CommandsRegisty(GotMessages().getClass.getTypeName).isDefined)
-      assert(CommandsRegisty(AssignMessageToGroup().getClass.getTypeName).isDefined)
-      assert(CommandsRegisty(AssignMessageToGroupCompleted().getClass.getTypeName).isDefined)
-      assert(CommandsRegisty(AssignMessageToGroupFailed().getClass.getTypeName).isDefined)
-      assert(CommandsRegisty(GroupByIdDeleted().getClass.getTypeName).isDefined)
-      assert(CommandsRegisty(CannotDeleteGroupById().getClass.getTypeName).isDefined)
-      assert(CommandsRegisty(CreateGroup().getClass.getTypeName).isDefined)
-      assert(CommandsRegisty(GroupCreated().getClass.getTypeName).isDefined)
-      assert(CommandsRegisty(CannotCreateGroup().getClass.getTypeName).isDefined)
+    // FIXME this is not readable try to use fixtures or helper functions defined
+    // in this scope something like:
+    //
+    // val assertDefined = (x: CommandsRegistyRegisterable) =>
+    //   CommandsRegisty(x.getClass.getTypeName).isDefined)
+    //
+    assert(CommandsRegisty(GetAllMessages().getClass.getTypeName).isDefined)
+    assert(CommandsRegisty(GetMessagesForGroup().getClass.getTypeName).isDefined)
+    assert(CommandsRegisty(DeleteGroupById().getClass.getTypeName).isDefined)
+    assert(CommandsRegisty(GotMessages().getClass.getTypeName).isDefined)
+    assert(CommandsRegisty(AssignMessageToGroup().getClass.getTypeName).isDefined)
+    assert(CommandsRegisty(AssignMessageToGroupCompleted().getClass.getTypeName).isDefined)
+    assert(CommandsRegisty(AssignMessageToGroupFailed().getClass.getTypeName).isDefined)
+    assert(CommandsRegisty(GroupByIdDeleted().getClass.getTypeName).isDefined)
+    assert(CommandsRegisty(CannotDeleteGroupById().getClass.getTypeName).isDefined)
+    assert(CommandsRegisty(CreateGroup().getClass.getTypeName).isDefined)
+    assert(CommandsRegisty(GroupCreated().getClass.getTypeName).isDefined)
+    assert(CommandsRegisty(CannotCreateGroup().getClass.getTypeName).isDefined)
 
-
+    // FIXME same issue as above, create fixtures to explain expectations
     assert(GetAllMessages().fromJson(GetAllMessages().asJson) == GetAllMessages())
     assert(GetMessagesForGroup("group").fromJson(GetMessagesForGroup("group").asJson) == GetMessagesForGroup("group"))
     assert(DeleteGroupById("group").fromJson(DeleteGroupById("group").asJson) == DeleteGroupById("group"))

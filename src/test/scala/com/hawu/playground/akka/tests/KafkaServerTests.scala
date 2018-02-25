@@ -36,21 +36,23 @@ class KafkaServerTests extends FlatSpec {
       val kafkaProducerActor = system.actorOf(Props(classOf[CommandKafkaProducer]))
       val commandTopic = system.settings.config.getString("playground.command.kafka.topic")
 
-      for(i <- 0 to 100) kafkaProducerActor ! SendKafkaMessageToTopic(commandTopic, KafkaMessage(System.currentTimeMillis(), f"$i%n-hash", f"test-message-$i%n"))
+      for (i <- 0 to 100) {
+        kafkaProducerActor ! SendKafkaMessageToTopic(commandTopic, KafkaMessage(System.currentTimeMillis(), f"$i%n-hash", f"test-message-$i%n"))
+      }
 
       import scala.concurrent.ExecutionContext.Implicits.global
       implicit val timeout = Timeout(5 seconds)
 
       (dummyCommandAndRepliesReceiver ? WaitForNumberOfMessage(100)) map {
-          case WaitingDone => succeed
-          case akka.actor.ReceiveTimeout => fail
-          case t => fail
+        case WaitingDone => succeed
+        case akka.actor.ReceiveTimeout => fail
+        case t => fail
       }
     } catch {
       case t: Throwable =>
         actorSystem.map(as => as.log.error("Exception while starting entrypoint {}", t))
         import scala.concurrent.ExecutionContext.Implicits.global
-        Future{ fail }
+        Future { fail }
     }
  }
 }

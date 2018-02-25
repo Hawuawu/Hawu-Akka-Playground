@@ -4,7 +4,6 @@ import akka.actor.{Actor, ActorLogging, ActorRef}
 import com.hawu.playground.akka.consumer.KafkaSerializedMessage
 import scala.concurrent.duration._
 
-
 case class  WaitForNumberOfMessage(number: Int)
 case object WaitingDone
 
@@ -15,26 +14,26 @@ class DummyCommandAndRepliesReceiver extends Actor with ActorLogging {
   var required = Int.MaxValue
   var replyTo: Option[ActorRef] = None
 
+  def receive = {
+    case akka.actor.ReceiveTimeout =>
+      replyTo.map(_ => akka.actor.ReceiveTimeout)
 
-   def receive = {
-     case akka.actor.ReceiveTimeout =>
-       replyTo.map(rp => akka.actor.ReceiveTimeout)
-
-     case WaitForNumberOfMessage(number) =>
-       required = number
+    case WaitForNumberOfMessage(number) =>
+      required = number
       replyTo = Some(sender)
-       test
+      test
 
     case msg: KafkaSerializedMessage =>
       log.debug("Dummy received message {}", msg.message)
-       counter += 1
-       test
+      counter += 1
+      test
   }
 
   def test: Unit = {
-    if(counter >= required)
-      {
-        replyTo.map(rp => rp ! WaitingDone)
-      }
+    if (counter < required) {
+      return
+    }
+    replyTo.map(_ ! WaitingDone)
   }
+
 }

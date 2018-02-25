@@ -33,6 +33,7 @@ object ActorSystemTerminator {
 
       }))
 
+    // FIXME avoid splits, use pattern matching
     if (restServerBinding.isEmpty) {
       actorSystem.map(as => {
 
@@ -254,7 +255,7 @@ class RESTServerTests extends AsyncFlatSpec  {
 
       val client = new RESTClient(system, "http", "localhost", 8083)
       import scala.concurrent.ExecutionContext.Implicits.global
-      val future: Future  [HttpResponse] = client.createGroup("aa")
+      val future: Future[HttpResponse] = client.createGroup("aa")
       future map {
         req => {
           actorSystem.map(as => {
@@ -271,7 +272,7 @@ class RESTServerTests extends AsyncFlatSpec  {
     } catch {
       case t: Throwable =>
         ActorSystemTerminator(actorSystem,restServerBinding)
-        Future {fail}
+        Future { fail } // FIXME replace with either `Future.successful` or `Future.failed`
     }
   }
 
@@ -288,7 +289,6 @@ class RESTServerTests extends AsyncFlatSpec  {
 
       restServerBinding = Some(RESTServer(8082, "localhost", commanController, system))
 
-
       val client = new RESTClient(system, "http", "localhost", 8082)
       import scala.concurrent.ExecutionContext.Implicits.global
       val future: Future[HttpResponse] = client.deleteGroup("aa")
@@ -301,7 +301,7 @@ class RESTServerTests extends AsyncFlatSpec  {
     } catch {
       case t: Throwable =>
         ActorSystemTerminator(actorSystem,restServerBinding)
-        Future {fail}
+        Future { fail } // FIXME replace with either `Future.successful` or `Future.failed`
     }
   }
 
@@ -319,7 +319,6 @@ class RESTServerTests extends AsyncFlatSpec  {
 
       restServerBinding = Some(RESTServer(8083, "localhost", commanController, system))
 
-
       val client = new RESTClient(system, "http", "localhost", 8083)
       import scala.concurrent.ExecutionContext.Implicits.global
       val future: Future[HttpResponse] = client.deleteGroup("aa")
@@ -332,14 +331,14 @@ class RESTServerTests extends AsyncFlatSpec  {
             responseAsString.map(body => assert(body == "cannotDeleteGroupReason"))
           })
 
-          ActorSystemTerminator(actorSystem,restServerBinding) 
+          ActorSystemTerminator(actorSystem,restServerBinding)
           assert(req.status.intValue == 500)
         }
       }
     } catch {
       case t: Throwable =>
         ActorSystemTerminator(actorSystem,restServerBinding)
-        Future {fail}
+        Future { fail } // FIXME replace with either `Future.successful` or `Future.failed`
     }
   }
 
@@ -377,9 +376,8 @@ class RESTServerTests extends AsyncFlatSpec  {
     } catch {
       case t: Throwable =>
         ActorSystemTerminator(actorSystem,restServerBinding)
-        Future {fail}
+        Future { fail } // FIXME replace with either `Future.successful` or `Future.failed`
     }
-
-
   }
+
 }

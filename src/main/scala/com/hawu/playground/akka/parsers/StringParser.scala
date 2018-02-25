@@ -29,8 +29,8 @@ object StringParser {
   def isStringParseable_?(t: String): Boolean = getClass.getDeclaredFields.exists(f => {
     f.setAccessible(true)
     val splitted = t.split("\\.")
-    val searchingFor = splitted.last.toLowerCase
-    if(splitted.nonEmpty) {
+    //val searchingFor = splitted.last.toLowerCase // UNUSED
+    if (splitted.nonEmpty) {
       f.getName.toLowerCase.contains(splitted.last.toLowerCase)
     } else {
       f.getName.toLowerCase.contains(t)

@@ -22,11 +22,14 @@ class CommandController(kafkaProducer: ActorRef, replyProxy: ActorRef) extends A
               .digest(f"$command-$timestamp-$uuid".getBytes("UTF-8")))
           )
 
-          Serialization(command).map(serializedCommand => {
-            val commandObjectName = command.getClass.getTypeName
+          val commandObjectName = command.getClass.getTypeName
+          Serialization(command).foreach(serializedCommand => {
             replyProxy.tell(RegisterKafkaMessageForReply(KafkaMessage(timestamp, hash, serializedCommand, command.getClass.getTypeName)), sender)
             kafkaProducer ! SendKafkaMessageToTopic(commandTopic, KafkaMessage(timestamp, hash, serializedCommand, commandObjectName))
           })
+
+          // INFO signature requires to return Unit, Non-Unit returned
+          ()
 
         case other =>
           kafkaProducer ! SendKafkaMessageToTopic(commandTopic, KafkaMessage(timestamp, "", Serialization(command).getOrElse(""), command.getClass.getTypeName))

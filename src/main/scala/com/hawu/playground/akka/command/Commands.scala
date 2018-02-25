@@ -20,8 +20,7 @@ trait PlaygroundCommand extends KafkaJSONSerializable with KafkaJSONDeserializab
 
 trait CommandRequiresResponse
 
-trait HttpCommandResponse extends KafkaJSONSerializable with KafkaJSONDeserializable with CommandsRegistyRegisterable {
-}
+trait HttpCommandResponse extends KafkaJSONSerializable with KafkaJSONDeserializable with CommandsRegistyRegisterable {}
 
 case object CommandTimeouted
 //Get messages command
@@ -31,7 +30,6 @@ object GetMessagesForGroupProtocol extends DefaultJsonProtocol {
 }
 
 case class GetMessagesForGroup(groupdId: String = "") extends PlaygroundCommand with CommandRequiresResponse {
-
 
   import GetMessagesForGroupProtocol._
 
@@ -46,7 +44,6 @@ case class GetMessagesForGroup(groupdId: String = "") extends PlaygroundCommand 
     val js = json.parseJson
     js.convertTo[GetMessagesForGroup]
   }
-
 
 }
 
@@ -73,18 +70,17 @@ case class GetAllMessages() extends PlaygroundCommand with CommandRequiresRespon
 object GotMessagesProtocol extends DefaultJsonProtocol {
   implicit val gotMessages = jsonFormat2(GotMessages)
 }
+
 case class GotMessages(groupId: String = "", messages: List[String] = List()) extends HttpCommandResponse
 {
 
   import GotMessagesProtocol._
 
-
   override def asJson: String = {
     this.toJson.compactPrint
   }
 
-  override def fromJson(json: String): KafkaJSONDeserializable =
-  {
+  override def fromJson(json: String): KafkaJSONDeserializable = {
     val js = json.parseJson
     js.convertTo[GotMessages]
   }
@@ -104,8 +100,7 @@ case class AssignMessageToGroup(groupId: String = "", message: String = "") exte
     this.toJson.compactPrint
   }
 
-  override def fromJson(json: String): KafkaJSONDeserializable =
-  {
+  override def fromJson(json: String): KafkaJSONDeserializable = {
     val js = json.parseJson
     js.convertTo[AssignMessageToGroup]
   }
@@ -124,10 +119,8 @@ case class AssignMessageToGroupCompleted(groupId: String = "", message: String =
     this.toJson.compactPrint
   }
 
-  override def fromJson(json: String): KafkaJSONDeserializable =
-  {
-    val js = json.parseJson
-    js.convertTo[AssignMessageToGroupCompleted]
+  override def fromJson(json: String): KafkaJSONDeserializable = {
+    json.parseJson.convertTo[AssignMessageToGroupCompleted]
   }
 }
 
@@ -136,18 +129,15 @@ object AssignMessageToGroupFailedProtocol extends DefaultJsonProtocol {
 }
 
 
-case class AssignMessageToGroupFailed(groupId: String = "", message: String = "", reason: String = "") extends HttpCommandResponse
-{
+case class AssignMessageToGroupFailed(groupId: String = "", message: String = "", reason: String = "") extends HttpCommandResponse {
   import AssignMessageToGroupFailedProtocol._
 
   override def asJson: String = {
     this.toJson.compactPrint
   }
 
-  override def fromJson(json: String): KafkaJSONDeserializable =
-  {
-    val js = json.parseJson
-    js.convertTo[AssignMessageToGroupFailed]
+  override def fromJson(json: String): KafkaJSONDeserializable = {
+    json.parseJson.convertTo[AssignMessageToGroupFailed]
   }
 }
 
@@ -155,6 +145,7 @@ case class AssignMessageToGroupFailed(groupId: String = "", message: String = ""
 object DeleteGroupByIdProtocol extends DefaultJsonProtocol {
   implicit val deleteGroupById = jsonFormat1(DeleteGroupById)
 }
+
 //Delete group by id command
 case class DeleteGroupById(groupId: String = "") extends PlaygroundCommand with CommandRequiresResponse {
   import DeleteGroupByIdProtocol._
@@ -165,10 +156,8 @@ case class DeleteGroupById(groupId: String = "") extends PlaygroundCommand with 
     this.toJson.compactPrint
   }
 
-  override def fromJson(json: String): KafkaJSONDeserializable =
-  {
-    val js = json.parseJson
-    js.convertTo[DeleteGroupById]
+  override def fromJson(json: String): KafkaJSONDeserializable = {
+    json.parseJson.convertTo[DeleteGroupById]
   }
 }
 
@@ -183,10 +172,8 @@ case class GroupByIdDeleted(groupId: String = "") extends HttpCommandResponse {
     this.toJson.compactPrint
   }
 
-  override def fromJson(json: String): KafkaJSONDeserializable =
-  {
-    val js = json.parseJson
-    js.convertTo[GroupByIdDeleted]
+  override def fromJson(json: String): KafkaJSONDeserializable = {
+    json.parseJson.convertTo[GroupByIdDeleted]
   }
 }
 
@@ -202,10 +189,8 @@ case class CannotDeleteGroupById(groupId: String = "", reason: String = "") exte
     this.toJson.compactPrint
   }
 
-  override def fromJson(json: String): KafkaJSONDeserializable =
-  {
-    val js = json.parseJson
-    js.convertTo[CannotDeleteGroupById]
+  override def fromJson(json: String): KafkaJSONDeserializable = {
+    json.parseJson.convertTo[CannotDeleteGroupById]
   }
 }
 
@@ -221,10 +206,8 @@ case class CreateGroup(groupId: String = "") extends PlaygroundCommand with Comm
     this.toJson.compactPrint
   }
 
-  override def fromJson(json: String): KafkaJSONDeserializable =
-  {
-    val js = json.parseJson
-    js.convertTo[CreateGroup]
+  override def fromJson(json: String): KafkaJSONDeserializable = {
+    json.parseJson.convertTo[CreateGroup]
   }
 }
 
@@ -240,10 +223,8 @@ case class GroupCreated(groupId: String = "") extends HttpCommandResponse {
     this.toJson.compactPrint
   }
 
-  override def fromJson(json: String): KafkaJSONDeserializable =
-  {
-    val js = json.parseJson
-    js.convertTo[GroupCreated]
+  override def fromJson(json: String): KafkaJSONDeserializable = {
+    json.parseJson.convertTo[GroupCreated]
   }
 }
 
@@ -259,10 +240,8 @@ case class CannotCreateGroup(groupId: String = "", reason: String = "") extends 
     this.toJson.compactPrint
   }
 
-  override def fromJson(json: String): KafkaJSONDeserializable =
-  {
-    val js = json.parseJson
-    js.convertTo[CannotCreateGroup]
+  override def fromJson(json: String): KafkaJSONDeserializable = {
+    json.parseJson.convertTo[CannotCreateGroup]
   }
 }
 
@@ -276,7 +255,7 @@ object CommandsRegisty {
   }
 
   def apply(s: String): Option[CommandsRegistyRegisterable] = {
-    registry.find(f => f.getClass.getTypeName == s)
+    registry.find(_.getClass.getTypeName == s)
   }
 
 }

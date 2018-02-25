@@ -24,16 +24,18 @@ object RESTServer {
 
     val services = new RESTServices(commandController)
 
-    if(usingHtps) {
+    if (usingHtps) {
       Http().setDefaultServerHttpContext(ConnectionContext.https(HttpsConnectionFromKeystore(sslPass, as)))
     }
 
     Http().bindAndHandle(
-      services.getMessagesReq ~
+      path("") { // FIXME end or single slash?
+        services.getMessagesReq ~
         services.getAllMessagesReq ~
         services.deleteGroupReq ~
         services.createGroupReq ~
         services.moveMessageToGroupReq
-      , host, port)
+      },
+      host, port)
   }
 }
