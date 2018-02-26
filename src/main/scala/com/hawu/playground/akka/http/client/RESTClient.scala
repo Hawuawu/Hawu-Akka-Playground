@@ -30,7 +30,8 @@ object RESTClientURLBuilder {
       [info]   akka.http.scaladsl.model.IllegalUriException: Illegal URI reference: Invalid input '\n', expected '/', 'EOI', '#', '?' or pchar (line 1, column 25): http://localhost:8080/v1
     */
 
-    val base = f"$prefix%s://$host%s:$port%n".replaceAll("\\s", "")
+    val base = f"$prefix%s://$host%s:$port%n"
+      .replaceAll("\\s", "")
 
     if (parameters.isEmpty) {
       return base
@@ -48,23 +49,33 @@ class RESTClient(actorSystem: ActorSystem, prefix: String, host: String, port: I
 
   def getAllMessagesUsingHTTPS(context: HttpsConnectionContext) = {
     Http().setDefaultClientHttpsContext(context)
-    Http().singleRequest(HttpRequest(GET, uri = RESTClientURLBuilder(prefix, host, port)))
+    Http().singleRequest(HttpRequest(GET, uri
+      = RESTClientURLBuilder(prefix, host, port))
+    )
   }
 
-  // FIXME lines too long (over 120 characters)
-
   def getAllMessages = Http()
-    .singleRequest(HttpRequest(GET, uri = RESTClientURLBuilder(prefix, host, port)))
+    .singleRequest(HttpRequest(GET, uri
+      = RESTClientURLBuilder(prefix, host, port))
+    )
 
   def getAllMessagesForGroupId(groupId: String) = Http()
-    .singleRequest(HttpRequest(GET, uri = RESTClientURLBuilder(prefix, host, port, HashMap("groupId" -> groupId))))
+    .singleRequest(HttpRequest(GET, uri =
+      RESTClientURLBuilder(prefix, host, port, HashMap("groupId" -> groupId)))
+    )
 
   def createGroup(groupId: String) = Http()
-    .singleRequest(HttpRequest(POST, uri =  RESTClientURLBuilder(prefix, host, port, HashMap("groupId" -> groupId))))
+    .singleRequest(HttpRequest(POST, uri =
+      RESTClientURLBuilder(prefix, host, port, HashMap("groupId" -> groupId)))
+    )
 
   def deleteGroup(groupId: String) = Http()
-    .singleRequest(HttpRequest(DELETE, uri =  RESTClientURLBuilder(prefix, host, port, HashMap("groupId" -> groupId))))
+    .singleRequest(HttpRequest(DELETE, uri =
+      RESTClientURLBuilder(prefix, host, port, HashMap("groupId" -> groupId)))
+    )
 
   def assignMessaggeToGroupId(message: String, groupId: String) = Http()
-    .singleRequest(HttpRequest(PUT, uri =  RESTClientURLBuilder(prefix, host, port,  HashMap("groupId" -> groupId, "message" -> message))))
+    .singleRequest(HttpRequest(PUT, uri =
+      RESTClientURLBuilder(prefix, host, port,  HashMap("groupId" -> groupId, "message" -> message)))
+    )
 }

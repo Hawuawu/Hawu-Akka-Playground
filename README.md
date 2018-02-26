@@ -15,7 +15,9 @@ You can find RESTServer services definition at following url's:
  \[
  [RESTServer](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/scala/com/hawu/playground/akka/http/server/RESTServer.scala)
  , [RESTService](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/main/scala/com/hawu/playground/akka/http/server/RESTServices.scala)
-, [Unit tests](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/RESTServerTests.scala)
+, [Unit tests for 201](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/RESTServerTestsStatusOk.scala)
+, [Unit tests for 501](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/RESTServerTestsFail.scala)
+, [Unit tests for https](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/RESTServerTestsHTTPS.scala)
 \]
 
 **Self-signed certificate**
@@ -39,8 +41,7 @@ Installed CentOS 7, Zookeeper, Apache Kafka and tested
 - [Kafka producer](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_test_producer.png)
 - [Kafka consumer](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/kafka_test_consumer.png)
 - Followed article with installation of [kafka server](https://www.vultr.com/docs/how-to-install-apache-kafka-on-centos-7)
-- Changed proper ipaddresses to current host
-- [Unit tests](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/KafkaServerTests.scala) for Kafka server **needs to have broker and server running!**
+- Changed proper ipaddresses to current host	
 
 [Diagram for kafka communication](https://raw.githubusercontent.com/Hawuawu/Hawu-Akka-Playground/master/src/main/resources/Kafka_layer.png)
 
@@ -66,11 +67,7 @@ run
 
 _It needs to have broker - kafka server running_
 
-- [Get all messages](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/GetAllMessagesTest.scala)
-- [Get messages for group](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/ShowMessagesForGroupTest.scala)
-- [Create group](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/CreateGroupsTest.scala)
-- [Delete group](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/DeleteGroupTest.scala)
-- [Assign messages to group](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/AssignMessageToGroupTest.scala)
+- [All roundtrip tests](https://github.com/Hawuawu/Hawu-Akka-Playground/blob/master/src/test/scala/com/hawu/playground/akka/tests/KafkaServiceTests.scala)
 
 _Improved scala tests for using async flat spec , no more await synchronization, but there are cases when I need synchronization_
 
