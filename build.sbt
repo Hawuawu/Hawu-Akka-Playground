@@ -8,6 +8,7 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0",
   "com.typesafe.akka" %% "akka-actor" % "2.5.9",
   "com.typesafe.akka" %% "akka-persistence" % "2.5.9",
+  "com.typesafe.akka" %% "akka-testkit" % "2.5.10" % Test,
   "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
   "org.apache.spark" %% "spark-core" % "2.2.1",
   "org.apache.kafka" %% "kafka" % "1.0.0",

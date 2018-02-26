@@ -29,7 +29,7 @@ object RESTServer {
     }
 
     Http().bindAndHandle(
-      path("") { // FIXME end or single slash?
+      pathEndOrSingleSlash {
         services.getMessagesReq ~
         services.getAllMessagesReq ~
         services.deleteGroupReq ~

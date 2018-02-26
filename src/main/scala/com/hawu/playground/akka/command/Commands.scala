@@ -23,6 +23,7 @@ trait CommandRequiresResponse
 trait HttpCommandResponse extends KafkaJSONSerializable with KafkaJSONDeserializable with CommandsRegistyRegisterable {}
 
 case object CommandTimeouted
+
 //Get messages command
 
 object GetMessagesForGroupProtocol extends DefaultJsonProtocol {
@@ -257,5 +258,8 @@ object CommandsRegisty {
   def apply(s: String): Option[CommandsRegistyRegisterable] = {
     registry.find(_.getClass.getTypeName == s)
   }
+
+  def registrableName(obj: CommandsRegistyRegisterable) = obj.getClass.getTypeName
+  def isInRegistry_?(obj: CommandsRegistyRegisterable) = registry.exists(registrableName(_) == registrableName(obj))
 
 }

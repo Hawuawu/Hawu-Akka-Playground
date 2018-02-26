@@ -9,10 +9,7 @@ import scala.collection.immutable.HashMap
 class PlaygroundPersistentState() extends Actor with ActorLogging {
 
   // FIXME really dislike this mutation, use actor.become
-  var registry: HashMap[String, List[String]] = HashMap(
-    "group1" -> List("message1", "message2"),
-    "group2" -> List("message1", "message2")
-  )
+  var registry: HashMap[String, List[String]] = HashMap()
 
   def receive = {
 
